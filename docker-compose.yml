@@ -1,0 +1,23 @@
+networks:
+  web4react:
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: ./backend/Dockerfile
+    networks:
+      - web4react
+    ports:
+      - "3210:3210"
+
+  frontend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - web4react
+    depends_on:
+      - backend
