@@ -151,7 +151,11 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:80"));
+        // Разрешаем доступ с порта Vite (5173) и стандартного 3000
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:80",
+                "http://localhost:5173",
+                "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));

@@ -1,4 +1,7 @@
 cd backend
-mvn clean package
+./mvnw spring-boot:run
 cd ..
-docker-compose -p webapp4 up --build
+
+cd frontend
+npm install
+npm run dev
