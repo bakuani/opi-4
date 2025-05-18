@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ani.web.models.Point;
 import ru.ani.web.models.User;
 import ru.ani.web.repositories.PointRepository;
+import ru.ani.web.services.AreaCalculator;
 import ru.ani.web.services.CheckPoint;
 import ru.ani.web.services.PointCounter;
 
@@ -26,13 +27,15 @@ public class PointController {
     private final PointRepository pointRepository;
     private final CheckPoint checkPoint;
     private final PointCounter pointCounter;
+    private final AreaCalculator areaCalculator;
 
 
     @Autowired
-    public PointController(PointRepository pointRepository, CheckPoint checkPoint, PointCounter pointCounter) {
+    public PointController(PointRepository pointRepository, CheckPoint checkPoint, PointCounter pointCounter, AreaCalculator areaCalculator) {
         this.pointRepository = pointRepository;
         this.checkPoint = checkPoint;
         this.pointCounter = pointCounter;
+        this.areaCalculator = areaCalculator;
     }
 
     /**
@@ -41,7 +44,7 @@ public class PointController {
      *
      * @param point the Point object containing x, y, r values
      * @return ResponseEntity with JSON {"point": point} and status 200 on success,
-     *         or error message with status 400/500 on failure
+     * or error message with status 400/500 on failure
      */
     @PostMapping("/api/check-point")
     public ResponseEntity<?> checkPoint(@RequestBody Point point) {
@@ -58,7 +61,10 @@ public class PointController {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         point.setUserId(currentUser.getId());
         pointRepository.save(point);
+
         pointCounter.incrementCounters(point);
+        areaCalculator.addPoint(point.getX(), point.getY());
+        areaCalculator.getArea();
 
         return new ResponseEntity<>(Map.of("point", point), HttpStatus.OK);
     }
@@ -67,7 +73,7 @@ public class PointController {
      * Retrieve all previously checked points for the current user.
      *
      * @return ResponseEntity with JSON {"points": […]} and status 200,
-     *         or error message with status 500 on failure
+     * or error message with status 500 on failure
      */
     @GetMapping("/api/get-points")
     public ResponseEntity<Map<String, ArrayList<Point>>> getPoints() {

@@ -1,5 +1,8 @@
 package ru.ani.web.services;
 
 public interface AreaCalculatorMBean {
-    double calculateArea(double r);
+    void addPoint(double x, double y);
+    double getArea();
+    int getPointCount();
+    void clearPoints();
 }
