@@ -4,10 +4,12 @@ import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 import ru.ani.web.models.Point;
 
 @Component
+@ManagedResource(objectName = "ru.ani.web.services:type=PointCounter", description = "Count different types of points")
 public class PointCounter extends NotificationBroadcasterSupport implements PointCounterMBean {
 
     private final CheckPoint pointChecker;
