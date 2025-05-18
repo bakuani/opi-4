@@ -25,21 +25,21 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
     }
 
     @Override
-    public int getTotalPoints() {
+    public synchronized int getTotalPoints() {
         return totalPoints;
     }
 
     @Override
-    public int getInvalidPoints() {
+    public synchronized int getInvalidPoints() {
         return invalidPoints;
     }
 
     @Override
-    public int getNotInAreaPoints() {
+    public synchronized int getNotInAreaPoints() {
         return notInAreaPoints;
     }
 
-    public void incrementCounters(Point point) {
+    public synchronized void incrementCounters(Point point) {
         totalPoints++;
 
         if (isOutOfDisplayArea(point)) {
@@ -58,7 +58,7 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
         }
     }
 
-    private boolean isOutOfDisplayArea(Point point) {
+    private synchronized boolean isOutOfDisplayArea(Point point) {
         return point.getX() < -5 || point.getX() > 5 || point.getY() < -5 || point.getY() > 5;
     }
 }
