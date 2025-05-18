@@ -1,5 +1,8 @@
 package ru.ani.web.services;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class AreaCalculator implements AreaCalculatorMBean {
 
     @Override
